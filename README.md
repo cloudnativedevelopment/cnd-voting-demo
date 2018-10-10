@@ -29,13 +29,13 @@ kubectl apply -f manifests
 If you are running in Docker for Mac, the Voting App is available on `locahost:port 31000`.
 If you are running in minikube, the Voting App is available on port 31000 in the minikube ip (`minikube ip`).
 
-Note that, if you click on "Cats" or "Dogs" in the Voting App UI, a container id is shown at the bottom.
+Note that if you click on "Cats" or "Dogs" in the Voting App UI, a container id is shown at the bottom.
 
 Now, let's change the python app to return a fix value for this container id.
 
 Edit the file `vote/app.py` and change the line 37 to be `hostname="classic"`. Save your changes.
 
-In order to test the changes, we need to rebuild or docker image by executing:
+In order to test the changes we need to rebuild or docker image by executing:
 
 ```
 docker build -t voting:demo vote
@@ -47,7 +47,7 @@ and apply the kubernetes manifests again:
 kubectl apply -f manifests
 ```
 
-This introduces some friction, but even worse, if you check the Voting App UI and make a new vote, the code changes are not reflected. This is because we are using the same docker image tag. In order to refresh our pod we could create a different image tag and modify our `manifests/vote-deployment.yaml` to use the nre docker image tag, or we can fore the pod recreation by deleting the running pod. Let go with the second approach and execute:
+This introduces some friction, but even worse, if you check the Voting App UI and make a new vote, the code changes are not reflected. This is because we are using the same docker image tag. In order to refresh our pod we could create a different image tag and modify our `manifests/vote-deployment.yaml` to use the new docker image tag, or we can force the pod recreation by deleting the running pod. Let's go with the second approach and execute:
 
 ```
 kubectl get pods
@@ -59,10 +59,10 @@ there will be a pod whose name starts with `vote-` (`vote-5d7889d8c9-lvpss`). Re
 kubectl delete pods/vote-5d7889d8c9-lvpss
 ```
 
-Now, go to the Voting App UI, make a vote, and finally your code changes will be live.
+Wait a few seconds for kubernetes to deploy the new pod. Then go to the Voting App UI, make a vote, and finally your code changes will be live.
 
 
-**Conclusion**: Classic Kubernetes Development introduces friction and decrease productivity.
+**Conclusion**: Classic Kubernetes Development introduces friction by requiring you to build images and redeploy them to your cluster to test every change. This substantially decreases productivity.
 
 ## Cloud Native Development
 
