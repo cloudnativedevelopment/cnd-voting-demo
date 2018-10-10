@@ -1,2 +1,3 @@
-# cnd-voting-demo
-This repository contains a CND demo for the well known project of the voting app
+# Voting App CND demo
+
+This repository contains a CND demo for the well known [voting app](https://github.com/dockersamples/example-voting-app).
