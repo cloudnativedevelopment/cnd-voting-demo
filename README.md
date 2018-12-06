@@ -5,7 +5,7 @@ Develop a simple distributed application the cloud native way.
 ## Prerequistes
 
 - Running Kubernetes cluster with support for load balancers (we used GKE)
-- If you're using Minikube, you'll need to configura and run the `minikube tunnel` command to be able to access the load balanced services.  More information on that [is available here](https://github.com/kubernetes/minikube/blob/master/docs/tunnel.md).
+- If you're using Minikube, you'll need to configure and run the `minikube tunnel` command to be able to access the load balanced services.  More information on that [is available here](https://github.com/kubernetes/minikube/blob/master/docs/tunnel.md).
 - Kubectl [installed and configured](https://kubernetes.io/docs/tasks/tools/install-kubectl/) in your machine
 
 
