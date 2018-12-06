@@ -1,11 +1,11 @@
-name: cnd-vote
 swap:
   deployment:
-    file: ./manifests/vote-deployment.yaml
+    name: vote
     container: vote
-    image: voting:demo
-  service:
-    file: /manifests/vote-service.yaml
+    command: 
+      - python
+    args:
+      - app.py
 mount:
   source: vote
   target: /app
