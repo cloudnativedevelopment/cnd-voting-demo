@@ -1,100 +1,84 @@
 # Voting App CND demo
 
-This repository contains a Cloud Native Development ([CND](https://github.com/okteto/cnd)) demo for the well known Docker [Voting App](https://github.com/dockersamples/example-voting-app).
+Develop a simple distributed application the cloud native way.
 
-## Classic Kubernetes Development
+## Getting started
+`kube-deployment.yml` contains the specifiations of the Voting App's services.
 
-Classic Kubernetes Development refers to the development mode where developers build docker images and update their pods to test their changes. This mode introduces developer friction due to the **docker build redeploy** cycle.
-
-Let's make a demo of this development mode using the Voting App.
-The demo works in both, Docker for Mac (with Kubernetes support) and [minikube](https://github.com/kubernetes/minikube).
-For minikube, remember to configure your docker client by running:
-
-```bash
-eval $(minikube docker-env)
+First create the vote namespace
+```
+kubectl create namespace vote
 ```
 
-Clone this repo and move to its root folder. Build the `voting:demo` image tag by executing:
+Run the following command to create the deployments and services objects
 
 ```
-docker build -t voting:demo vote
+$ kubectl create -f kube-deployment.yml --namespace vote
+service/redis created
+deployment.apps/redis created
+service/db created
+deployment.apps/db created
+persistentvolumeclaim/postgres-pv-claim created
+service/result created
+deployment.apps/result created
+service/vote created
+deployment.apps/vote created
+service/worker created
+deployment.apps/worker created
 ```
 
-and run the Voting App by executing:
+Run the following command to get the ip and port of the vote service
 
 ```
-kubectl apply -f manifests
+$ kubectl get service vote --namespace=vote
+NAME   TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)          AGE
+vote   LoadBalancer   10.15.249.191   35.204.101.246   5000:30250/TCP   4m41s
 ```
 
-If you are running in Docker for Mac, the Voting App is available on `locahost:port 31000`.
-If you are running in minikube, the Voting App is available on port 31000 in the minikube ip (`minikube ip`).
+Open a browser and navigate to the vote service's UI (e.g. http://35.204.101.246:5000) to make sure that everything is in order.
 
-Click on "Cats" or "Dogs" in the Voting App UI, note that a container id is shown at the bottom.
-
-Let's change the python app to return a fix value for this container id.
-
-Edit the file `vote/app.py` and change the line 37 to be `hostname="classic"`. Save your changes.
-
-In order to test the changes we need to rebuild our docker image by executing:
-
-```
-docker build -t voting:demo vote
-```
-
-and apply the Kubernetes manifests again:
-
-```
-kubectl apply -f manifests
-```
-
-This development workflow introduces friction, but even worse, if you check the Voting App UI and make a new vote, the code changes are not reflected. This is because we are using the same docker image tag. In order to refresh our pod we could create a different image tag and modify our `manifests/vote-deployment.yaml` manifest to use the new docker image tag, or we can force the pod recreation by deleting the running pod. Let's go with the second approach and execute:
-
-```
-kubectl get pods
-```
-
-there will be a pod whose name starts with `vote-` (`vote-5d7889d8c9-lvpss`). Remove this pod by executing:
-
-```
-kubectl delete pods/vote-5d7889d8c9-lvpss
-```
-
-Wait a few seconds for Kubernetes to deploy the new pod. Then go to the Voting App UI, make a vote, and finally your code changes will be live.
-
-
-**Conclusion**: Classic Kubernetes Development introduces friction by requiring you to build images and redeploy them to your cluster to test every change. This substantially decreases productivity.
+Feel free to review the [Voting App official repo](https://github.com/dockersamples/example-voting-app) if you want more information on the app.
 
 ## Cloud Native Development
 
-Cloud Native Development reduces friction by eliminating the **docker build redeploy** cycle.
+[Cloud Native Development](https://github.com/okteto/cnd) helps you go faster friction by eliminating the **docker build redeploy** cycle.
 
-Go to the repo root folder and execute:
+Run the following command to start your [cloud native environment](https://github.com/okteto/cnd#cloud-native-development-cnd)
 
 ```
 cnd up
 ```
 
-this will create a remote container which is synchronized with your local code changes and hot reloads these changes without rebuilding containers. Once `cnd up` is finished, execute:
+This will create a remote container which is synchronized with your local code changes and hot reloads these changes without rebuilding containers. 
+
+Once `cnd up` is finished, open a browser and navigate to the vote service's UI. 
+
+Edit the file `vote/app.py` and change line 8 from `cats` to `otters` and save. 
+
+Go to the Voting App UI, make another vote. Boom! Your code changes are already live.
+
+Review [cnd's usage](https://github.com/okteto/cnd#usage) guide to see other commands available to help you speed you up your development.
+
+Cancel the `cnd up` command by pressing `ctrl + c` and run the following command to go back to the production version of the service
 
 ```
-cnd exec sh
+cnd down
+``` 
+
+## Cleanup
+Run the following commands to remove the resources created by the commands above 
+
 ```
-
-The new terminal is running in the remote container. Run the python app by executing:
-
+$ kubectl delete -f kube-deployment.yml --namespace vote
+service "redis" deleted
+deployment.apps "redis" deleted
+service "db" deleted
+deployment.apps "db" deleted
+persistentvolumeclaim "postgres-pv-claim" deleted
+service "result" deleted
+deployment.apps "result" deleted
+service "vote" deleted
+deployment.apps "vote" deleted
+service "worker" deleted
+deployment.apps "worker" deleted
 ```
-python app.py 
-```
-
-and check the Voting App UI is working properly.
-
-Edit the file `vote/app.py` and change the line 37 to be `hostname="cnd"`. Save your changes.
-
-Finally, go to the Voting App UI, make another vote, and cool! your code changes are live!
-
-**Conclusion**: Cloud Native Development reduces friction, increase productivity and enables team collaboration.
-
-
-
-
-
