@@ -2,6 +2,12 @@
 
 Develop a simple distributed application the cloud native way.
 
+## Prerequistes
+
+- Running Kubernetes cluster with support for load balancers (we used GKE)
+- Kubectl [installed and configured](https://kubernetes.io/docs/tasks/tools/install-kubectl/) in your machine
+
+
 ## Getting started
 `kube-deployment.yml` contains the specifications of the Voting App's services.
 
@@ -13,7 +19,7 @@ kubectl create namespace vote
 Run the following command to create the deployments and services objects
 
 ```
-$ kubectl create -f kube-deployment.yml --namespace vote
+$ kubectl create -f k8s-specifications --namespace vote
 service/redis created
 deployment.apps/redis created
 service/db created
@@ -84,3 +90,7 @@ deployment.apps "vote" deleted
 service "worker" deleted
 deployment.apps "worker" deleted
 ```
+
+## Notes
+
+If you're using Minikube, you'll need to run the `minikube tunnel` command to be able to access the load balanced services. Information on how to use it [is available here](https://github.com/kubernetes/minikube/blob/master/docs/tunnel.md).
