@@ -57,7 +57,10 @@ Edit the file `vote/app.py` and change line 8 from `cats` to `otters` and save.
 
 Go to the Voting App UI, make another vote. Your code changes are already live!!
 
-Review [cnd's usage](https://github.com/okteto/cnd#usage) guide to see other commands available to help you speed you up your development.
+*Review [cnd's usage](https://github.com/okteto/cnd#usage) guide to see other commands available to help you speed you up your development.
+
+
+## Cleanup
 
 Cancel the `cnd up` command by pressing `ctrl + c` and run the following command to go back to the production version of the service
 
@@ -65,7 +68,6 @@ Cancel the `cnd up` command by pressing `ctrl + c` and run the following command
 cnd down
 ``` 
 
-## Cleanup
 Run the following commands to remove the resources created by the commands above 
 
 ```
