@@ -3,7 +3,7 @@
 Develop a simple distributed application the cloud native way.
 
 ## Getting started
-`kube-deployment.yml` contains the specifiations of the Voting App's services.
+`kube-deployment.yml` contains the specifications of the Voting App's services.
 
 First create the vote namespace
 ```
